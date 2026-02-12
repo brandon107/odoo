@@ -13,9 +13,7 @@ Odoo 19.0 — an open-source modular ERP/CRM platform written in Python. The cod
 
 ### Running the Server
 ```bash
-python odoo-bin -c odoo.conf
-# or explicitly:
-python odoo-bin --addons-path=odoo/addons,addons -d odoo_db
+python odoo-bin -c odoo.conf -d odoo_db -u estate
 ```
 
 ### Installing/Updating Modules
