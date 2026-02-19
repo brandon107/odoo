@@ -201,9 +201,20 @@ export function toRefundTextContains(text) {
         trigger: `.ticket-screen .to-refund-highlight:contains("${text}")`,
     });
 }
+export function toRefundLineContains(product, text) {
+    return inLeftSide({
+        trigger: `.ticket-screen div:has(.product-name:contains("${product}")):has(.to-refund-highlight:contains("${text}"))`,
+    });
+}
 export function refundedNoteContains(text) {
     return inLeftSide({
         trigger: `.ticket-screen .refund-note:contains("${text}")`,
+    });
+}
+export function noLinesToRefund() {
+    return inLeftSide({
+        content: "No lines are marked for to refund or refunding",
+        trigger: ".ticket-screen:not(:has(.to-refund-highlight))",
     });
 }
 export function tipContains(amount) {

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo 9.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-12 18:35+0000\n"
+"POT-Creation-Date: 2026-01-25 18:35+0000\n"
 "PO-Revision-Date: 2025-11-15 11:29+0000\n"
 "Last-Translator: Weblate <noreply-mt-weblate@weblate.org>\n"
 "Language-Team: Hindi <https://translate.odoo.com/projects/odoo-19/hr_expense/"
@@ -554,6 +554,7 @@ msgstr "ओसीआर और एआई की मदद से अपनी �
 #: model:ir.model.fields,field_description:hr_expense.field_account_move__display_name
 #: model:ir.model.fields,field_description:hr_expense.field_account_move_line__display_name
 #: model:ir.model.fields,field_description:hr_expense.field_account_payment__display_name
+#: model:ir.model.fields,field_description:hr_expense.field_account_payment_register__display_name
 #: model:ir.model.fields,field_description:hr_expense.field_account_tax__display_name
 #: model:ir.model.fields,field_description:hr_expense.field_hr_department__display_name
 #: model:ir.model.fields,field_description:hr_expense.field_hr_employee__display_name
@@ -835,6 +836,11 @@ msgid "Expenses Report"
 msgstr "खर्चों की रिपोर्ट"
 
 #. module: hr_expense
+#: model_terms:ir.ui.view,arch_db:hr_expense.hr_expense_template_submitted_expenses
+msgid "Expenses approval"
+msgstr ""
+
+#. module: hr_expense
 #. odoo-python
 #: code:addons/hr_expense/models/hr_expense.py:0
 msgid "Expenses of %(employee)s"
@@ -936,6 +942,11 @@ msgid "Guideline"
 msgstr "गाइडलाइन"
 
 #. module: hr_expense
+#: model:ir.actions.server,name:hr_expense.ir_cron_send_submitted_expenses_mail_ir_actions_server
+msgid "HR Expense: Send Submitted Expenses Mail"
+msgstr ""
+
+#. module: hr_expense
 #: model:ir.model.fields,field_description:hr_expense.field_hr_expense__has_message
 msgid "Has Message"
 msgstr "मैसेज है"
@@ -956,6 +967,7 @@ msgstr "एचआर एक्सपेंस एलियास डोमेन
 #: model:ir.model.fields,field_description:hr_expense.field_account_move__id
 #: model:ir.model.fields,field_description:hr_expense.field_account_move_line__id
 #: model:ir.model.fields,field_description:hr_expense.field_account_payment__id
+#: model:ir.model.fields,field_description:hr_expense.field_account_payment_register__id
 #: model:ir.model.fields,field_description:hr_expense.field_account_tax__id
 #: model:ir.model.fields,field_description:hr_expense.field_hr_department__id
 #: model:ir.model.fields,field_description:hr_expense.field_hr_employee__id
@@ -1251,11 +1263,9 @@ msgstr "खर्च के लिए नई एंट्री"
 #. module: hr_expense
 #: model_terms:ir.ui.view,arch_db:hr_expense.hr_expense_template_submitted_expenses
 msgid ""
-"New expenses are awaiting your approval.\n"
-"                You can review them by following this link"
+"New expenses are waiting for your approval. You can Review them by following "
+"this link."
 msgstr ""
-"कुछ नए खर्च आए हैं जिन्हें आपको मंज़ूरी देनी है.\n"
-"                उन्हें देखने के लिए नीचे दिए गए लिंक का उपयोग करें"
 
 #. module: hr_expense
 #. odoo-python
@@ -1355,6 +1365,7 @@ msgstr "आपके निजी खर्चों से गणना कि�
 
 #. module: hr_expense
 #: model_terms:ir.ui.view,arch_db:hr_expense.hr_expense_template_register_no_user
+#: model_terms:ir.ui.view,arch_db:hr_expense.hr_expense_template_submitted_expenses
 msgid "Odoo"
 msgstr "Odoo"
 
@@ -1461,6 +1472,11 @@ msgid "Partner"
 msgstr "साथी"
 
 #. module: hr_expense
+#: model:ir.model,name:hr_expense.model_account_payment_register
+msgid "Pay"
+msgstr ""
+
+#. module: hr_expense
 #: model:ir.model.fields,field_description:hr_expense.field_hr_expense__payment_method_line_id
 msgid "Payment Method"
 msgstr "पेमेंट के तरीके"
@@ -1539,6 +1555,7 @@ msgstr "पोस्ट किया गया"
 
 #. module: hr_expense
 #: model_terms:ir.ui.view,arch_db:hr_expense.hr_expense_template_register_no_user
+#: model_terms:ir.ui.view,arch_db:hr_expense.hr_expense_template_submitted_expenses
 msgid "Powered by"
 msgstr "पॉवर्ड बॉय"
 
@@ -2404,6 +2421,13 @@ msgstr "बिल की तस्वीर से डेटा भरने क
 #: model_terms:ir.ui.view,arch_db:hr_expense.hr_expense_view_form
 msgid "with the same receipt already exists."
 msgstr "वही रसीद पहले से मौजूद है।"
+
+#~ msgid ""
+#~ "New expenses are awaiting your approval.\n"
+#~ "                You can review them by following this link"
+#~ msgstr ""
+#~ "कुछ नए खर्च आए हैं जिन्हें आपको मंज़ूरी देनी है.\n"
+#~ "                उन्हें देखने के लिए नीचे दिए गए लिंक का उपयोग करें"
 
 #~ msgid "View Attachments"
 #~ msgstr "अटैचमेंट देखें"

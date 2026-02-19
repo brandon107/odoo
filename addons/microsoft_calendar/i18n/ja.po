@@ -3,13 +3,13 @@
 # * microsoft_calendar
 #
 # "Dylan Kiss (dyki)" <dyki@odoo.com>, 2025.
-# "Junko Augias (juau)" <juau@odoo.com>, 2025.
+# "Junko Augias (juau)" <juau@odoo.com>, 2025, 2026.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-08 18:38+0000\n"
-"PO-Revision-Date: 2025-11-13 06:14+0000\n"
+"POT-Creation-Date: 2026-01-25 18:36+0000\n"
+"PO-Revision-Date: 2026-02-02 13:44+0000\n"
 "Last-Translator: \"Junko Augias (juau)\" <juau@odoo.com>\n"
 "Language-Team: Japanese <https://translate.odoo.com/projects/odoo-19/"
 "microsoft_calendar/ja/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12.2\n"
+"X-Generator: Weblate 5.14.3\n"
 
 #. module: microsoft_calendar
 #. odoo-python
@@ -55,7 +55,7 @@ msgstr "(タイトルなし)"
 #: model:ir.model.fields,field_description:microsoft_calendar.field_calendar_recurrence__active
 #: model:ir.model.fields,field_description:microsoft_calendar.field_microsoft_calendar_sync__active
 msgid "Active"
-msgstr "アクティブ"
+msgstr "有効"
 
 #. module: microsoft_calendar
 #. odoo-javascript
@@ -75,10 +75,9 @@ msgid ""
 "secret on the Microsoft Azure portal or try to stop and restart your "
 "calendar synchronisation."
 msgstr ""
-"トークンの生成中にエラーが発生しました。認証コードが無効であるか、"
-"使用期限が切れています [%s] Microsoft "
-"AzureポータルでクライアントIDとシークレットを確認するか、カレンダの同期を停止"
-"して再開して下さい。"
+"トークンの生成中にエラーが発生しました。認証コードが無効であるか、使用期限が"
+"切れています [%s] Microsoft AzureポータルでクライアントIDとシークレットを確認"
+"するか、カレンダの同期を停止して再開して下さい。"
 
 #. module: microsoft_calendar
 #: model:ir.model,name:microsoft_calendar.model_calendar_attendee
@@ -261,9 +260,8 @@ msgstr "ID"
 msgid ""
 "If the active field is set to false, it will allow you to hide the event "
 "alarm information without removing it."
-msgstr ""
-"アクティブなフィールドがfalseに設定されると、それを削除せずにイベントのアラー"
-"ム情報を非表示にすることができます。"
+msgstr "有効なフィールドがfalseに設定されると、それを削除せずにイベントのアラーム情報"
+"を非表示にすることができます。"
 
 #. module: microsoft_calendar
 #: model:ir.model.fields,help:microsoft_calendar.field_res_config_settings__cal_microsoft_sync_paused

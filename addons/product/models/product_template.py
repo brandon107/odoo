@@ -93,14 +93,14 @@ class ProductTemplate(models.Model):
     # list_price: catalog price, user defined
     list_price = fields.Float(
         'Sales Price', default=1.0,
-        digits='Product Price',
+        min_display_digits='Product Price',
         tracking=True,
         help="Price at which the product is sold to customers.",
     )
     standard_price = fields.Float(
         'Cost', compute='_compute_standard_price',
         inverse='_set_standard_price', search='_search_standard_price',
-        digits='Product Price', groups="base.group_user",
+        min_display_digits='Product Price', groups="base.group_user",
         help="""Value of the product (automatically computed in AVCO).
         Used to value the product when the purchase cost is not known (e.g. inventory adjustment).
         Used to compute margins on sale orders.""")
@@ -566,16 +566,19 @@ class ProductTemplate(models.Model):
         return res
 
     @api.depends('name', 'default_code')
-    @api.depends_context('formatted_display_name')
+    @api.depends_context('formatted_display_name', 'display_default_code')
     def _compute_display_name(self):
+        display_default_code = self.env.context.get('display_default_code', True)
         for template in self:
             if not template.name:
                 template.display_name = False
+            elif not (display_default_code and template.default_code):
+                template.display_name = template.name
             elif self.env.context.get('formatted_display_name'):
-                code_prefix = f'\t--{template.default_code}--' if template.default_code else ''
+                code_prefix = f'\t--{template.default_code}--'
                 template.display_name = f'{template.name}{code_prefix}'
             else:
-                code_prefix = f'[{template.default_code}] ' if template.default_code else ''
+                code_prefix = f'[{template.default_code}] '
                 template.display_name = f'{code_prefix}{template.name}'
 
     @api.model
@@ -1226,6 +1229,11 @@ class ProductTemplate(models.Model):
         :return: a generator of product template attribute value
         """
         if not product_template_attribute_values_per_line:
+            return
+
+        product_template_attribute_values_per_line = [ptav for ptav in product_template_attribute_values_per_line if len(ptav)]
+        if not product_template_attribute_values_per_line:
+            yield self.env['product.template.attribute.value']
             return
 
         all_exclusions = {self.env['product.template.attribute.value'].browse(k):

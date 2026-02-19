@@ -1,3 +1,5 @@
+/* global posmodel */
+
 import { registry } from "@web/core/registry";
 import * as Utils from "@pos_self_order/../tests/tours/utils/common";
 import * as CartPage from "@pos_self_order/../tests/tours/utils/cart_page_util";
@@ -5,6 +7,7 @@ import * as LandingPage from "@pos_self_order/../tests/tours/utils/landing_page_
 import * as ProductPage from "@pos_self_order/../tests/tours/utils/product_page_util";
 import * as ConfirmationPage from "@pos_self_order/../tests/tours/utils/confirmation_page_util";
 import * as Dialog from "@point_of_sale/../tests/generic_helpers/dialog_util";
+import { rpc } from "@web/core/network/rpc";
 
 registry.category("web_tour.tours").add("self_mobile_each_table_takeaway_in", {
     steps: () => [
@@ -15,7 +18,6 @@ registry.category("web_tour.tours").add("self_mobile_each_table_takeaway_in", {
         Utils.clickBtn("Checkout"),
         CartPage.checkProduct("Coca-Cola", "2.53", "1"),
         Utils.clickBtn("Order"),
-        ...CartPage.selectTable("3"),
         Utils.clickBtn("Ok"),
         Utils.checkIsNoBtn("Order Now"),
         Utils.clickBtn("My Order"),
@@ -58,7 +60,6 @@ registry.category("web_tour.tours").add("self_mobile_each_counter_takeaway_in", 
         Utils.clickBtn("Checkout"),
         CartPage.checkProduct("Coca-Cola", "2.53", "1"),
         Utils.clickBtn("Order"),
-        ...CartPage.selectTable("3"),
         Utils.clickBtn("Ok"),
         Utils.checkIsNoBtn("Order Now"),
         Utils.clickBtn("My Order"),
@@ -94,13 +95,16 @@ registry.category("web_tour.tours").add("self_mobile_meal_table_takeaway_in", {
         Utils.clickBtn("Order Now"),
         LandingPage.selectLocation("Test-In"),
         ProductPage.clickProduct("Coca-Cola"),
+        ProductPage.checkOrderTotal("2.53"),
+        ProductPage.checkProductQty("Coca-Cola", "1"),
         Utils.clickBtn("Checkout"),
         CartPage.checkProduct("Coca-Cola", "2.53", "1"),
         Utils.clickBtn("Order"),
-        ...CartPage.selectTable("3"),
         Utils.clickBtn("Ok"),
         Utils.clickBtn("Order Now"),
         ProductPage.clickProduct("Fanta"),
+        ProductPage.checkOrderTotal("2.53"),
+        ProductPage.checkProductQty("Fanta", "1"),
         Utils.clickBtn("Checkout"),
         CartPage.checkProduct("Fanta", "2.53", "1"),
         Utils.clickBtn("Order"),
@@ -119,6 +123,8 @@ registry.category("web_tour.tours").add("self_mobile_meal_table_takeaway_out", {
         Utils.clickBtn("Order Now"),
         LandingPage.selectLocation("Test-Takeout"),
         ProductPage.clickProduct("Coca-Cola"),
+        ProductPage.checkOrderTotal("2.53"),
+        ProductPage.checkProductQty("Coca-Cola", "1"),
         Utils.clickBtn("Checkout"),
         CartPage.checkProduct("Coca-Cola", "2.53", "1"),
         Utils.clickBtn("Order"),
@@ -128,6 +134,8 @@ registry.category("web_tour.tours").add("self_mobile_meal_table_takeaway_out", {
         Utils.clickBtn("Ok"),
         Utils.clickBtn("Order Now"),
         ProductPage.clickProduct("Fanta"),
+        ProductPage.checkOrderTotal("2.53"),
+        ProductPage.checkProductQty("Fanta", "1"),
         Utils.clickBtn("Checkout"),
         CartPage.checkProduct("Fanta", "2.53", "1"),
         Utils.clickBtn("Order"),
@@ -146,14 +154,17 @@ registry.category("web_tour.tours").add("self_mobile_meal_counter_takeaway_in", 
         Utils.clickBtn("Order Now"),
         LandingPage.selectLocation("Test-In"),
         ProductPage.clickProduct("Coca-Cola"),
+        ProductPage.checkOrderTotal("2.53"),
+        ProductPage.checkProductQty("Coca-Cola", "1"),
         Utils.clickBtn("Checkout"),
         CartPage.checkProduct("Coca-Cola", "2.53", "1"),
         Utils.clickBtn("Order"),
-        ...CartPage.selectTable("3"),
         ConfirmationPage.isShown(),
         Utils.clickBtn("Ok"),
         Utils.clickBtn("Order Now"),
         ProductPage.clickProduct("Fanta"),
+        ProductPage.checkOrderTotal("2.53"),
+        ProductPage.checkProductQty("Fanta", "1"),
         Utils.clickBtn("Checkout"),
         CartPage.checkProduct("Fanta", "2.53", "1"),
         Utils.clickBtn("Order"),
@@ -172,6 +183,8 @@ registry.category("web_tour.tours").add("self_mobile_meal_counter_takeaway_out",
         Utils.clickBtn("Order Now"),
         LandingPage.selectLocation("Test-Takeout"),
         ProductPage.clickProduct("Coca-Cola"),
+        ProductPage.checkOrderTotal("2.53"),
+        ProductPage.checkProductQty("Coca-Cola", "1"),
         Utils.clickBtn("Checkout"),
         CartPage.checkProduct("Coca-Cola", "2.53", "1"),
         Utils.clickBtn("Order"),
@@ -181,6 +194,8 @@ registry.category("web_tour.tours").add("self_mobile_meal_counter_takeaway_out",
         Utils.clickBtn("Ok"),
         Utils.clickBtn("Order Now"),
         ProductPage.clickProduct("Fanta"),
+        ProductPage.checkOrderTotal("2.53"),
+        ProductPage.checkProductQty("Fanta", "1"),
         Utils.clickBtn("Checkout"),
         CartPage.checkProduct("Fanta", "2.53", "1"),
         Utils.clickBtn("Order"),
@@ -199,6 +214,8 @@ registry.category("web_tour.tours").add("self_order_mobile_meal_cancel", {
         Utils.clickBtn("Order Now"),
         LandingPage.selectLocation("Test-Takeout"),
         ProductPage.clickProduct("Coca-Cola"),
+        ProductPage.checkOrderTotal("2.53"),
+        ProductPage.checkProductQty("Coca-Cola", "1"),
         Utils.clickBtn("Checkout"),
         CartPage.checkProduct("Coca-Cola", "2.53", "1"),
         CartPage.clickBack(),
@@ -206,6 +223,8 @@ registry.category("web_tour.tours").add("self_order_mobile_meal_cancel", {
         Utils.clickBtn("Order Now"),
         LandingPage.selectLocation("Test-Takeout"),
         ProductPage.clickProduct("Coca-Cola"),
+        ProductPage.checkOrderTotal("2.53"),
+        ProductPage.checkProductQty("Coca-Cola", "1"),
         Utils.clickBtn("Checkout"),
         CartPage.checkProduct("Coca-Cola", "2.53", "1"),
         Utils.clickBtn("Order"),
@@ -215,6 +234,8 @@ registry.category("web_tour.tours").add("self_order_mobile_meal_cancel", {
         Utils.clickBtn("Ok"),
         Utils.clickBtn("Order Now"),
         ProductPage.clickProduct("Fanta"),
+        ProductPage.checkOrderTotal("2.53"),
+        ProductPage.checkProductQty("Fanta", "1"),
         Utils.clickBtn("Checkout"),
         CartPage.clickBack(),
         ...ProductPage.clickCancel(),
@@ -348,7 +369,6 @@ registry.category("web_tour.tours").add("self_order_mobile_0_price_order", {
             Utils.clickBtn("Checkout"),
             CartPage.checkProduct("Ketchup", "0", "1"),
             Utils.clickBtn("Order"),
-            CartPage.selectTable("3"),
             ConfirmationPage.isShown(),
             Utils.clickBtn("Ok"),
             Utils.clickBtn("My Order"),
@@ -430,5 +450,31 @@ registry.category("web_tour.tours").add("self_order_mobile_no_access_token", {
             Utils.checkIsNoBtn("My Order"),
             Utils.clickBtn("Order Now"),
             Utils.negateStep(Utils.checkBtn("Order")),
+        ].flat(),
+});
+
+registry.category("web_tour.tours").add("test_delete_mobile_order_from_backend", {
+    steps: () =>
+        [
+            Utils.checkIsNoBtn("My Order"),
+            Utils.clickBtn("Order Now"),
+            ProductPage.clickProduct("Coca-Cola"),
+            Utils.clickBtn("Checkout"),
+            CartPage.checkProduct("Coca-Cola", "2.53", "1"),
+            Utils.clickBtn("Order"),
+            ConfirmationPage.isShown(),
+            Utils.clickBtn("Ok"),
+            Utils.checkIsNoBtn("Order Now"),
+            {
+                trigger: "body",
+                run: async () => {
+                    // Simulate mobile self-order deletion from the backend
+                    await rpc(`/pos-self-order/test-delete-order-from-backend/`, {
+                        order_ids: [posmodel.currentOrder.id],
+                    });
+                },
+            },
+            Utils.clickBtn("Order Now"),
+            ProductPage.isShown(),
         ].flat(),
 });

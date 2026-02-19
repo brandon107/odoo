@@ -165,7 +165,11 @@ class ResCompany(models.Model):
         return extra_balance
 
     def _get_location_valuation_vals(self, at_date=None, location_domain=False):
-        location_domain = (location_domain or []) + [('valuation_account_id', '!=', False)]
+        location_domain = Domain.AND([
+            location_domain or [],
+            [('valuation_account_id', '!=', False)],
+            [('company_id', '=', self.id)],
+        ])
         amls_vals_list = []
         valued_location = self.env['stock.location'].search(location_domain)
         last_closing_date = self._get_last_closing_date()
@@ -225,14 +229,17 @@ class ResCompany(models.Model):
 
         extra_balance = self._get_extra_balance(extra_aml_vals_list)
 
-        inventory_data = self.stock_value(accounts_by_product, at_date)
+        if 'inventory_data' in self.env.context:
+            inventory_data = self.env.context.get('inventory_data')
+        else:
+            inventory_data = self.stock_value(accounts_by_product, at_date)
         accounting_data = self.stock_accounting_value(accounts_by_product, at_date)
 
         accounts = inventory_data.keys() | accounting_data.keys()
         for account in accounts:
             account_variation = account.account_stock_variation_id
             if not account_variation:
-                account_variation = self.env.company.expense_account_id
+                account_variation = self.expense_account_id
             if not account_variation:
                 continue
             balance = inventory_data.get(account, 0) - accounting_data.get(account, 0)
@@ -332,7 +339,7 @@ class ResCompany(models.Model):
         if not closing:
             return False
         am_state_field = self.env['ir.model.fields'].search([('model', '=', 'account.move'), ('name', '=', 'state')], limit=1)
-        state_tracking = closing.message_ids.tracking_value_ids.filtered(lambda t: t.field_id == am_state_field).sorted('id')
+        state_tracking = closing.message_ids.sudo().tracking_value_ids.filtered(lambda t: t.field_id == am_state_field).sorted('id')
         return state_tracking[-1:].create_date or fields.Datetime.to_datetime(closing.date)
 
     def _save_closing_id(self, move_id):

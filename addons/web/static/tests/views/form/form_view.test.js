@@ -9122,6 +9122,7 @@ test(`form view is not broken if save operation fails with redirect warning`, as
 
 test.tags("desktop");
 test("Redirect Warning full feature: additional context, action_id, leaving while dirty", async function () {
+    expect.errors(1);
     defineActions([
         {
             id: 1,
@@ -12793,6 +12794,33 @@ test(`cog menu action is executed with up to date context`, async () => {
     await toggleActionMenu();
     await toggleMenuItem("Action Partner");
     expect.verifySteps(["doAction y", "doAction z"]);
+});
+
+test("CogMenu receives the model in env", async () => {
+    class CogItem extends Component {
+        static props = ["*"];
+        static template = xml`<button class="test-cog" t-on-click="onClick">Test</button>`;
+        onClick() {
+            expect.step([`cog clicked`, this.env.model.root.resModel, this.env.model.root.resId]);
+        }
+    }
+    registry.category("cogMenu").add("test-cog", {
+        Component: CogItem,
+        isDisplayed: (env) => {
+            expect.step([`cog displayed`, env.model.root.resModel, env.model.root.resId]);
+            return true;
+        },
+    });
+    await mountView({
+        resModel: "partner",
+        type: "form",
+        resId: 5,
+        arch: `<form><field name="display_name"/></form>`,
+    });
+    expect.verifySteps([["cog displayed", "partner", 5]]);
+    await contains(".o_cp_action_menus button").click();
+    await contains("button.test-cog").click();
+    expect.verifySteps([["cog clicked", "partner", 5]]);
 });
 
 test.tags("mobile");

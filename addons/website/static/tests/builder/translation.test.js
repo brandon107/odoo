@@ -2,7 +2,7 @@ import { Builder } from "@html_builder/builder";
 import { EditWebsiteSystrayItem } from "@website/client_actions/website_preview/edit_website_systray_item";
 import { setContent, setSelection } from "@html_editor/../tests/_helpers/selection";
 import { insertText, pasteHtml, pasteText } from "@html_editor/../tests/_helpers/user_actions";
-import { beforeEach, describe, expect, press, test } from "@odoo/hoot";
+import { beforeEach, delay, describe, expect, globals, press, test } from "@odoo/hoot";
 import {
     animationFrame,
     manuallyDispatchProgrammaticEvent,
@@ -20,6 +20,7 @@ import { expectElementCount } from "@html_editor/../tests/_helpers/ui_expectatio
 import { uniqueId } from "@web/core/utils/functions";
 import { TranslationPlugin } from "@website/builder/plugins/translation_plugin";
 import { dummyBase64Img } from "@html_builder/../tests/helpers";
+import { getTranslatedElements } from "./translated_elements_getter.hoot";
 
 defineWebsiteModels();
 
@@ -256,6 +257,19 @@ test("translate attribute history", async () => {
     expect(".modal .modal-body input").toHaveValue("title");
 });
 
+test("undo shortcut in translate", async () => {
+    const { getEditor } = await setupSidebarBuilderForTranslation({
+        websiteContent: `<h1>Homepage</h1>`,
+    });
+    await contains(".modal .btn:contains(Ok, never show me this again)").click();
+    setSelection({ anchorNode: queryOne(":iframe h1"), anchorOffset: 0 });
+    await insertText(getEditor(), "New ");
+    expect(":iframe h1").toHaveText("New Homepage");
+    await press(["ctrl", "z"]);
+    await getEditor().shared.operation.next();
+    expect(":iframe h1").not.toHaveText("New Homepage");
+});
+
 test("translate select", async () => {
     await setupSidebarBuilderForTranslation({
         websiteContent: `
@@ -348,7 +362,7 @@ describe("save translation", () => {
     beforeEach(async () => {
         onRpc("/website/field/translation/update", async (data) => {
             const { params } = await data.json();
-            expect.step(params.translations.fr_BE);
+            expect.step({ [params.record_id[0]]: params.translations.fr_BE });
             return true;
         });
     });
@@ -377,7 +391,7 @@ describe("save translation", () => {
             })} ${getTranslateEditable({ inWrap: "def", sourceSha: srcSha2 })}`,
         });
         await modifyBothTextsAndSave(getEditor());
-        expect.verifySteps([{ srcSha1: "a1bc", srcSha2: "d1ef" }]);
+        expect.verifySteps([{ 526: { srcSha1: "a1bc", srcSha2: "d1ef" } }]);
     });
 
     test("save translation of contents of different views", async () => {
@@ -389,7 +403,22 @@ describe("save translation", () => {
             })} ${getTranslateEditable({ inWrap: "def", oeId: 2, sourceSha: srcSha2 })}`,
         });
         await modifyBothTextsAndSave(getEditor());
-        expect.verifySteps([{ srcSha1: "a1bc" }, { srcSha2: "d1ef" }]);
+        expect.verifySteps([{ 1: { srcSha1: "a1bc" } }, { 2: { srcSha2: "d1ef" } }]);
+    });
+
+    test("save delayed translation even if not dirty", async () => {
+        const websiteContent = `
+            ${getTranslateEditable({ inWrap: "abc", oeId: 1, sourceSha: srcSha1 })}
+            ${getTranslateEditable({ inWrap: "def", oeId: 2, sourceSha: srcSha2 })}
+            ${getTranslateEditable({ inWrap: "ghi", oeId: 2, sourceSha: "srcSha3" })}
+            ${getTranslateEditable({ inWrap: "jkl", oeId: 3, sourceSha: "srcSha4" })}
+            ${getTranslateEditable({ inWrap: "mno", oeId: 4, sourceSha: "srcSha5" })}
+        `.replace(/ translate_branding">(?!jkl<)/g, ' o_delay_translation translate_branding">');
+        const { getEditor } = await setupSidebarBuilderForTranslation({
+            websiteContent: websiteContent,
+        });
+        await modifyBothTextsAndSave(getEditor());
+        expect.verifySteps([{ 4: {} }, { 1: { srcSha1: "a1bc" } }, { 2: { srcSha2: "d1ef" } }]);
     });
 });
 
@@ -490,6 +519,23 @@ test("Ensure the contenteditable attributes have been set before the Translation
     });
 });
 
+test("sidebar should open even when translated elements fetch is slow", async () => {
+    const originalFetch = globals.fetch;
+
+    patchWithCleanup(globals, {
+        async fetch(url, options) {
+            if (url === "/website/get_translated_elements") {
+                await delay(100);
+            }
+            return originalFetch.call(this, url, options);
+        },
+    });
+    await setupSidebarBuilderForTranslation({
+        websiteContent: getTranslateEditable({ inWrap: "Hello" }),
+    });
+    expect(".o_builder_sidebar_open").toHaveCount(1);
+});
+
 function getTranslateEditable({
     inWrap,
     oeId = "526",
@@ -528,6 +574,7 @@ async function setupSidebarBuilderForTranslation(options) {
             },
         }
     );
+    await getTranslatedElements();
     await openBuilderSidebar();
     return { getEditor, getEditableContent };
 }

@@ -15,12 +15,12 @@ import { isBarcodeScannerSupported } from "@web/core/barcode/barcode_video_scann
 import { barcodeService } from "@barcodes/barcode_service";
 import { Dropdown } from "@web/core/dropdown/dropdown";
 import { DropdownItem } from "@web/core/dropdown/dropdown_item";
-import { user } from "@web/core/user";
 import { OrderTabs } from "@point_of_sale/app/components/order_tabs/order_tabs";
 import { _t } from "@web/core/l10n/translation";
 import { uuidv4 } from "@point_of_sale/utils";
 import { QrCodeCustomerDisplay } from "@point_of_sale/app/customer_display/customer_display_qr_code_popup";
 import { useAsyncLockedMethod } from "@point_of_sale/app/hooks/hooks";
+import { AlertDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 
 export class Navbar extends Component {
     static template = "point_of_sale.Navbar";
@@ -49,10 +49,17 @@ export class Navbar extends Component {
         this.timeout = null;
         this.bufferedInput = "";
         onMounted(async () => {
-            this.isSystemUser = await user.hasGroup("base.group_system");
+            this.hasProductCreationAccess = await this.pos.allowProductCreation();
         });
         useExternalListener(document, "keydown", this.handleKeydown.bind(this));
         this.openPresetTiming = useAsyncLockedMethod(this.openPresetTiming);
+    }
+
+    openLnaPopup() {
+        this.dialog.add(AlertDialog, {
+            title: _t("LNA Permission status"),
+            body: this.pos.lnaState.message,
+        });
     }
 
     handleKeydown(event) {
@@ -151,18 +158,13 @@ export class Navbar extends Component {
             this.pos.config.id
         }/${getDeviceUuid()}`;
 
-        if (this.ui.isSmall) {
-            this.dialog.add(QrCodeCustomerDisplay, {
-                customerDisplayURL: `${this.pos.config._base_url}${customer_display_url}`,
-            });
-            return;
-        }
-        window.open(customer_display_url, "newWindow", "width=800,height=600,left=200,top=200");
-        this.notification.add(_t("PoS Customer Display opened in a new window"));
+        this.dialog.add(QrCodeCustomerDisplay, {
+            customerDisplayURL: `${this.pos.config._base_url}${customer_display_url}`,
+        });
     }
 
     get showCreateProductButton() {
-        return this.isSystemUser;
+        return this.hasProductCreationAccess;
     }
 
     get shouldDisplayPresetTime() {

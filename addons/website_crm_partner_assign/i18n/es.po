@@ -7,15 +7,15 @@
 # Leonardo J. Caballero G. <leonardocaballero@gmail.com>, 2022
 # "Dylan Kiss (dyki)" <dyki@odoo.com>, 2025.
 # "Tiffany Chang (tic)" <tic@odoo.com>, 2025.
-# "Noemi Pla Garcia (nopl)" <nopl@odoo.com>, 2025.
+# "Noemi Pla Garcia (nopl)" <nopl@odoo.com>, 2025, 2026.
 # "Malaz Siddig Elsayed Abuidris (msea)" <msea@odoo.com>, 2025.
 # Weblate <noreply-mt-weblate@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 18:37+0000\n"
-"PO-Revision-Date: 2025-12-04 14:04+0000\n"
+"POT-Creation-Date: 2026-01-25 18:37+0000\n"
+"PO-Revision-Date: 2026-02-03 12:06+0000\n"
 "Last-Translator: \"Noemi Pla Garcia (nopl)\" <nopl@odoo.com>\n"
 "Language-Team: Spanish <https://translate.odoo.com/projects/odoo-19/"
 "website_crm_partner_assign/es/>\n"
@@ -60,8 +60,8 @@ msgid ""
 "<i class=\"fa fa-map-marker\" role=\"img\" aria-label=\"Open map\" "
 "title=\"Open map\"/>"
 msgstr ""
-"<i class=\"fa fa-map-marker\" role=\"img\" aria-label=\"Open map\" title="
-"\"Open map\"/>"
+"<i class=\"fa fa-map-marker\" role=\"img\" aria-label=\"Open map\" "
+"title=\"Open map\"/>"
 
 #. module: website_crm_partner_assign
 #: model_terms:ir.ui.view,arch_db:website_crm_partner_assign.portal_my_opportunity
@@ -110,9 +110,8 @@ msgid ""
 "                                                    </span>"
 msgstr ""
 "<span class=\"input-group-text o_input_group_date_icon\">\n"
-"                                                        <span class="
-"\"fa fa-calendar\" role=\"img\" aria-label=\"Calendar\" title=\"Calendar\"/>"
-"\n"
+"                                                        <span class=\"fa fa-"
+"calendar\" role=\"img\" aria-label=\"Calendar\" title=\"Calendar\"/>\n"
 "                                                    </span>"
 
 #. module: website_crm_partner_assign
@@ -124,8 +123,8 @@ msgid ""
 "                                                    </span>"
 msgstr ""
 "<span class=\"input-group-text o_input_group_date_icon\">\n"
-"                                                        <span class="
-"\"fa fa-calendar\" role=\"img\" aria-label=\"Calendar\"/>\n"
+"                                                        <span class=\"fa fa-"
+"calendar\" role=\"img\" aria-label=\"Calendar\"/>\n"
 "                                                    </span>"
 
 #. module: website_crm_partner_assign
@@ -141,8 +140,8 @@ msgid ""
 "invisible=\"partner_latitude &gt;= 0\">S </span>"
 msgstr ""
 "<span class=\"opacity-50\" invisible=\"partner_latitude &lt;= 0\">N </span>\n"
-"                                    <span class=\"opacity-50\" invisible="
-"\"partner_latitude &gt;= 0\">S </span>"
+"                                    <span class=\"opacity-50\" "
+"invisible=\"partner_latitude &gt;= 0\">S </span>"
 
 #. module: website_crm_partner_assign
 #: model_terms:ir.ui.view,arch_db:website_crm_partner_assign.view_crm_lead_opportunity_geo_assign_form
@@ -153,10 +152,10 @@ msgid ""
 "invisible=\"partner_longitude &gt;= 0\">W </span>\n"
 "                                    <span class=\"opacity-50 ps-1\">) </span>"
 msgstr ""
-"<span class=\"opacity-50\" invisible=\"partner_longitude &lt;= 0\">E </span>"
-"\n"
-"                                    <span class=\"opacity-50\" invisible="
-"\"partner_longitude &gt;= 0\">O </span>\n"
+"<span class=\"opacity-50\" invisible=\"partner_longitude &lt;= 0\">E </"
+"span>\n"
+"                                    <span class=\"opacity-50\" "
+"invisible=\"partner_longitude &gt;= 0\">O </span>\n"
 "                                    <span class=\"opacity-50 ps-1\">) </span>"
 
 #. module: website_crm_partner_assign
@@ -1169,6 +1168,8 @@ msgid ""
 "Only users with commercial partner which is a parent of the assigned partner "
 "can edit this lead."
 msgstr ""
+"Solo los usuarios cuyo partner comercial sea la empresa matriz del partner "
+"asignado pueden editar este lead."
 
 #. module: website_crm_partner_assign
 #: model_terms:ir.ui.view,arch_db:website_crm_partner_assign.index_filter_by_industry
@@ -1235,7 +1236,7 @@ msgstr "Fecha de asignación del socio:"
 #. module: website_crm_partner_assign
 #: model:ir.model,name:website_crm_partner_assign.model_res_partner_grade
 msgid "Partner Grade"
-msgstr "Grado del socio"
+msgstr "Nivel del partner"
 
 #. module: website_crm_partner_assign
 #: model:ir.model.fields,field_description:website_crm_partner_assign.field_crm_lead_assignation__partner_location
@@ -1246,7 +1247,7 @@ msgstr "Ubicación del socio"
 #. odoo-javascript
 #: code:addons/website_crm_partner_assign/static/src/website_builder/partner_page_option_plugin.js:0
 msgid "Partner Page"
-msgstr ""
+msgstr "Página de partner"
 
 #. module: website_crm_partner_assign
 #: model_terms:ir.ui.view,arch_db:website_crm_partner_assign.view_crm_partner_assign_form
@@ -1307,7 +1308,7 @@ msgstr "Ingreso previsto"
 #. module: website_crm_partner_assign
 #: model_terms:ir.ui.view,arch_db:website_crm_partner_assign.index
 msgid "Please check back soon."
-msgstr ""
+msgstr "Por favor, vuelve a intentarlo pronto."
 
 #. module: website_crm_partner_assign
 #: model_terms:ir.ui.view,arch_db:website_crm_partner_assign.portal_my_opportunity
@@ -1393,7 +1394,7 @@ msgstr "Buscar"
 #. module: website_crm_partner_assign
 #: model_terms:ir.ui.view,arch_db:website_crm_partner_assign.index
 msgid "Search by name or address"
-msgstr ""
+msgstr "Buscar por nombre o dirección"
 
 #. module: website_crm_partner_assign
 #: model_terms:ir.ui.view,arch_db:website_crm_partner_assign.index
@@ -1574,7 +1575,7 @@ msgstr "Advertencia"
 #. module: website_crm_partner_assign
 #: model_terms:ir.ui.view,arch_db:website_crm_partner_assign.index
 msgid "We're expanding our partner network."
-msgstr ""
+msgstr "Estamos ampliando nuestra red de partners."
 
 #. module: website_crm_partner_assign
 #: model:ir.model,name:website_crm_partner_assign.model_website

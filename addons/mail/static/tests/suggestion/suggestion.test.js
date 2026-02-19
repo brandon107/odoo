@@ -117,6 +117,7 @@ test("[text composer] can @user in restricted (group_public_id) channels", async
     });
     await start();
     await openDiscuss(channelId);
+    await contains(".o-discuss-ChannelMemberList"); // wait for auto-open of this panel
     await click("button[title='Invite People']");
     await contains(".o-discuss-ChannelInvitation-invitationBox", {
         text: 'Access restricted to group "Custom Channel Group"',
@@ -148,6 +149,7 @@ test("can @user in restricted (group_public_id) channels", async () => {
     const composerService = getService("mail.composer");
     composerService.setHtmlComposer();
     await openDiscuss(channelId);
+    await contains(".o-discuss-ChannelMemberList"); // wait for auto-open of this panel
     await click("button[title='Invite People']");
     await contains(".o-discuss-ChannelInvitation-invitationBox", {
         text: 'Access restricted to group "Custom Channel Group"',
@@ -825,8 +827,8 @@ test("[text composer] Internal user should be displayed first", async () => {
     await click("button", { text: "Send message" });
     await insertText(".o-mail-Composer-input", "@Person ");
     await contains(":nth-child(1 of .o-mail-Composer-suggestion) strong", { text: "Person D" });
-    await contains(":nth-child(2 of .o-mail-Composer-suggestion) strong", { text: "Person C" });
-    await contains(":nth-child(3 of .o-mail-Composer-suggestion) strong", { text: "Person B" });
+    await contains(":nth-child(2 of .o-mail-Composer-suggestion) strong", { text: "Person B" });
+    await contains(":nth-child(3 of .o-mail-Composer-suggestion) strong", { text: "Person C" });
     await contains(":nth-child(4 of .o-mail-Composer-suggestion) strong", { text: "Person A" });
 });
 
@@ -867,8 +869,8 @@ test("Internal user should be displayed first", async () => {
     await focus(".o-mail-Composer-html.odoo-editor-editable");
     await htmlInsertText(editor, "@Person ");
     await contains(":nth-child(1 of .o-mail-Composer-suggestion) strong", { text: "Person D" });
-    await contains(":nth-child(2 of .o-mail-Composer-suggestion) strong", { text: "Person C" });
-    await contains(":nth-child(3 of .o-mail-Composer-suggestion) strong", { text: "Person B" });
+    await contains(":nth-child(2 of .o-mail-Composer-suggestion) strong", { text: "Person B" });
+    await contains(":nth-child(3 of .o-mail-Composer-suggestion) strong", { text: "Person C" });
     await contains(":nth-child(4 of .o-mail-Composer-suggestion) strong", { text: "Person A" });
 });
 

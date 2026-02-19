@@ -7,6 +7,7 @@ from odoo.addons.point_of_sale.tests.common import archive_products
 from odoo.addons.point_of_sale.tests.test_frontend import TestPointOfSaleHttpCommon
 from odoo import Command
 import json
+from datetime import datetime, timedelta
 
 @odoo.tests.tagged('post_install', '-at_install')
 class TestFrontendCommon(TestPointOfSaleHttpCommon):
@@ -341,6 +342,10 @@ class TestFrontend(TestFrontendCommon):
     def test_pos_restaurant_course(self):
         self.pos_config.with_user(self.pos_user).open_ui()
         self.start_pos_tour('test_pos_restaurant_course')
+        order = self.pos_config.current_session_id.order_ids
+        self.assertEqual(len(order), 1)
+        # Verify whether the two courses have different timestamps
+        self.assertNotEqual(order.course_ids[0].fired_date, order.course_ids[1].fired_date)
 
     def test_preparation_printer_content(self):
         self.preset_eat_in = self.env['pos.preset'].create({
@@ -536,6 +541,11 @@ class TestFrontend(TestFrontendCommon):
         self.assertEqual(line_1.tax_ids, self.tax_sale_a)
         self.assertEqual(line_2.tax_ids, self.tax_sale_a)
 
+    def test_no_ghost_floor(self):
+        self.pos_config.is_order_printer = False
+        self.pos_config.with_user(self.pos_user).open_ui()
+        self.start_pos_tour('no_ghost_floor', login="pos_admin")
+
     def test_multiple_preparation_printer_different_categories(self):
         """This test make sure that no empty receipt are sent when using multiple printer with different categories
            The tour will check that we tried did not try to print two receipt. We can achieve that by checking the content
@@ -593,6 +603,58 @@ class TestFrontend(TestFrontendCommon):
             'name': 'Takeaway',
             'identification': 'name',
         })
+        self.preset_delivery = self.env['pos.preset'].create({
+            'name': 'Delivery',
+            'identification': 'address',
+        })
+        self.main_pos_config.write({
+            'use_presets': True,
+            'default_preset_id': self.preset_delivery.id,
+            'available_preset_ids': [(6, 0, [
+                self.preset_takeaway.id,
+                self.preset_eat_in.id,
+                self.preset_delivery.id,
+            ])],
+        })
+        self.start_pos_tour('test_preset_delivery_restaurant')
+        resource_calendar = self.env['resource.calendar'].create({
+            'name': 'Takeaway',
+            'attendance_ids': [(0, 0, {
+                'name': 'Takeaway',
+                'dayofweek': str(day),
+                'hour_from': 0,
+                'hour_to': 24,
+                'day_period': 'morning',
+            }) for day in range(0, 7)],
+        })
+        self.preset_takeaway.write({
+            'use_timing': True,
+            'resource_calendar_id': resource_calendar
+        })
+        self.main_pos_config.write({'default_preset_id': self.preset_takeaway.id})
+        self.start_pos_tour('test_open_register_with_preset_takeaway')
+        self.main_pos_config.write({'default_preset_id': self.preset_eat_in.id})
+        cancelled_orders = self.env['pos.order'].search([('state', '=', 'cancel')], limit=3)
+        self.assertEqual(len(cancelled_orders), 1)
+        orders = self.env['pos.order'].search([('state', '!=', 'cancel')], limit=3)
+        self.assertEqual(len(orders), 0)
+        self.start_pos_tour('test_preset_timing_restaurant')
+        self.preset_eat_in.write({
+            'use_guest': True,
+        })
+        self.start_pos_tour('test_guest_count_bank_payment')
+
+    def test_preset_future_timing_restaurant(self):
+        """
+        Test to set order preset future date inside a tour
+        """
+        self.preset_eat_in = self.env['pos.preset'].create({
+            'name': 'Eat in',
+        })
+        self.preset_takeaway = self.env['pos.preset'].create({
+            'name': 'Takeaway',
+            'identification': 'name',
+        })
         self.main_pos_config.write({
             'use_presets': True,
             'default_preset_id': self.preset_eat_in.id,
@@ -612,13 +674,7 @@ class TestFrontend(TestFrontendCommon):
             'use_timing': True,
             'resource_calendar_id': resource_calendar
         })
-        self.start_pos_tour('test_preset_timing_restaurant')
-        self.preset_eat_in.write({
-            'use_guest': True,
-        })
-        self.start_pos_tour('test_guest_count_bank_payment')
-        self.main_pos_config.write({'default_preset_id': self.preset_takeaway.id})
-        self.start_pos_tour('test_open_register_with_preset_takeaway')
+        self.start_pos_tour('test_cancel_future_order')
 
     def test_restaurant_preset_eatin_tour(self):
         self.pos_config.write({
@@ -722,7 +778,7 @@ class TestFrontend(TestFrontendCommon):
         """
         self.start_pos_tour('test_direct_sales', login="pos_user")
         orders = self.env['pos.order'].search([], limit=3, order='id desc')
-        self.assertEqual(orders[2].floating_order_name, orders[2].pos_reference)
+        self.assertEqual(orders[2].floating_order_name, orders[2].tracking_number)
         self.assertEqual(orders[1].floating_order_name, "Test")
         self.assertEqual(orders[0].floating_order_name, False)
         self.assertIsNotNone(orders[0].table_id)
@@ -743,7 +799,7 @@ class TestFrontend(TestFrontendCommon):
         self.pos_config.with_user(self.pos_user).open_ui()
         self.start_pos_tour('test_sync_set_partner')
         order = self.pos_config.current_session_id.order_ids[0]
-        self.assertEqual(order.partner_id.name, "Deco Addict")
+        self.assertEqual(order.partner_id.name, "Acme Corporation")
 
     def test_sync_set_note(self):
         self.pos_config.with_user(self.pos_user).open_ui()
@@ -815,3 +871,57 @@ class TestFrontend(TestFrontendCommon):
         })
         self.pos_config.with_user(self.pos_user).open_ui()
         self.start_pos_tour('test_name_preset_skip_screen')
+
+    def test_future_orders_are_not_cancelled(self):
+        """
+        This test ensures that a future order is not cancelled when the PoS session is closed.
+        """
+        self.pos_config.with_user(self.pos_user).open_ui()
+
+        session = self.pos_config.current_session_id
+        product = self.env['product.product'].search([('available_in_pos', '=', True)], limit=1)
+
+        present_order = self.env['pos.order'].create({
+            'company_id': self.env.company.id,
+            'session_id': session.id,
+            'lines': [(0, 0, {
+                'name': "OL/0001",
+                'product_id': product.id,
+                'price_unit': 10.0,
+                'discount': 0.0,
+                'qty': 1.0,
+                'tax_ids': False,
+                'price_subtotal': 10.0,
+                'price_subtotal_incl': 10.0,
+            })],
+            'amount_tax': 0.0,
+            'amount_total': 10.0,
+            'amount_paid': 0.0,
+            'amount_return': 0.0,
+            'preset_time': datetime.now(),
+        })
+        future_order = self.env['pos.order'].create({
+            'company_id': self.env.company.id,
+            'session_id': session.id,
+            'lines': [(0, 0, {
+                'name': "OL/0002",
+                'product_id': product.id,
+                'price_unit': 10.0,
+                'discount': 0.0,
+                'qty': 1.0,
+                'tax_ids': False,
+                'price_subtotal': 10.0,
+                'price_subtotal_incl': 10.0,
+            })],
+            'amount_tax': 0.0,
+            'amount_total': 10.0,
+            'amount_paid': 0.0,
+            'amount_return': 0.0,
+            'preset_time': datetime.now() + timedelta(days=1),
+        })
+
+        self.start_pos_tour('test_futur_orders_are_not_cancelled')
+        self.pos_config.current_session_id.close_session_from_ui()
+        self.assertEqual(present_order.state, 'cancel')
+        self.assertEqual(future_order.state, 'draft')
+        self.assertEqual(future_order.session_id.id, False)

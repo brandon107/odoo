@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from datetime import timedelta
+from json import loads
 
 from odoo import Command, fields
 from odoo.tests import Form
@@ -400,7 +401,8 @@ class TestProcurement(TestMrpCommon):
         3. Add an extra manufactured component (not in stock) to 1st MO => auto-create 3rd MO
         4. When 2nd MO is completed => auto-assign to 1st MO
         5. When 1st MO is completed => auto-assign to picking
-        6. Additionally check that a MO that has component in stock auto-reserves when MO is confirmed (since default setting = 'at_confirm')"""
+        6. Additionally check that a MO that has component in stock auto-reserves when MO is confirmed (since default setting = 'at_confirm')
+        7. Check daily demand fluctuations for products entering or leaving production."""
 
         self.picking_type_out.reservation_method = 'at_confirm'
         route_manufacture = self.warehouse_1.manufacture_pull_id.route_id
@@ -471,7 +473,7 @@ class TestProcurement(TestMrpCommon):
             'product_max_qty': 5,
         })
 
-        self.env['stock.warehouse.orderpoint'].create({
+        orderpoint_p2 = self.env['stock.warehouse.orderpoint'].create({
             'name': 'Cake Mix RR',
             'location_id': self.stock_location.id,
             'product_id': product_2.id,
@@ -486,6 +488,13 @@ class TestProcurement(TestMrpCommon):
             'product_min_qty': 0,
             'product_max_qty': 5,
         })
+
+        info_p2 = self.env['stock.replenishment.info'].create({'orderpoint_id': orderpoint_p2.id})
+        info_p2.write({
+            'based_on': 'one_week',
+        })
+        graph_data = loads(info_p2.json_replenishment_graph)
+        self.assertEqual(graph_data['daily_demand'], 0.0)
 
         # create picking output to trigger creating MO for reordering product_1
         pick_output = self.env['stock.picking'].create({
@@ -504,6 +513,10 @@ class TestProcurement(TestMrpCommon):
         })
         pick_output.action_confirm()  # should trigger orderpoint to create and confirm 1st MO
         pick_output.action_assign()
+
+        info_p2._compute_json_replenishment_graph()
+        graph_data = loads(info_p2.json_replenishment_graph)
+        self.assertEqual(graph_data['daily_demand'], 2.14)
 
         mo = self.env['mrp.production'].search([
             ('product_id', '=', product_1.id),
@@ -563,6 +576,10 @@ class TestProcurement(TestMrpCommon):
         mo_form.product_uom_id = product_1.uom_id
         mo_assign_at_confirm = mo_form.save()
         mo_assign_at_confirm.action_confirm()
+
+        info_p2._compute_json_replenishment_graph()
+        graph_data = loads(info_p2.json_replenishment_graph)
+        self.assertEqual(graph_data['daily_demand'], 2.86)
 
         self.assertEqual(mo_assign_at_confirm.move_raw_ids.quantity, 5, "Components should have been auto-reserved")
 
@@ -627,7 +644,7 @@ class TestProcurement(TestMrpCommon):
         create_run_procurement(product, 10, {
             'reference_ids': reference,
             'warehouse_id': self.warehouse_1,
-            'partner_id': vendor,
+            'partner_id': vendor.id,
         })
         customer_move = self.env['stock.move'].search([('reference_ids', 'in', reference.id), ('picking_type_id', '=', self.picking_type_out.id)])
         manufacturing_order = self.env['mrp.production'].search([('product_id', '=', product.id)])
@@ -640,7 +657,7 @@ class TestProcurement(TestMrpCommon):
         create_run_procurement(product, -5.00, {
             'reference_ids': reference,
             'warehouse_id': self.warehouse_1,
-            'partner_id': vendor,
+            'partner_id': vendor.id,
         })
         self.assertEqual(customer_move.product_uom_qty, 5, 'The demand on the initial move should have been decreased when merged with the procurement.')
         self.assertEqual(manufacturing_order.product_qty, 10, 'The demand on the manufacturing order should not have been decreased.')
@@ -1116,3 +1133,54 @@ class TestProcurement(TestMrpCommon):
         })
         update_quantity_wizard.change_prod_qty()
         self.assertEqual(replenishment.product_uom_qty, 7)
+
+    def test_update_mo_producing_qty_mto_chain(self):
+        """
+        Test that an MTO child MO correctly handles UoM conversions between the component UoM and
+        the child MO UoM when the source MO's production quantity is updated.
+        """
+        self.productA.write({'uom_id': self.uom_dozen})
+
+        self.route_mto.write({'active': True})
+        self.productA.route_ids = [
+            Command.link(self.route_mto.id),
+            Command.link(self.route_manufacture.id),
+        ]
+
+        self.env['mrp.bom'].create({
+            'product_tmpl_id': self.productA.product_tmpl_id.id,
+            'product_qty': 1.0,
+            'type': 'normal',
+            'product_uom_id': self.productA.uom_id.id,
+            'bom_line_ids': [
+                Command.create({'product_id': self.productB.id, 'product_qty': 1}),
+            ],
+        })
+        bomC = self.env['mrp.bom'].create({
+            'product_tmpl_id': self.productC.product_tmpl_id.id,
+            'product_qty': 1.0,
+            'type': 'normal',
+            'bom_line_ids': [
+                Command.create({'product_id': self.productA.id, 'product_qty': 6.0, 'product_uom_id': self.uom_unit.id}),
+            ],
+        })
+
+        mo = self.env['mrp.production'].create({
+            'product_id': self.productC.id,
+            'bom_id': bomC.id,
+            'product_qty': 1,
+        })
+        mo.action_confirm()
+        mo_child = mo._get_children()
+
+        self.assertEqual(mo.move_raw_ids.product_uom, self.uom_unit)
+        self.assertEqual(mo_child.product_uom_id, self.uom_dozen)
+        self.assertEqual(mo_child.product_qty, 0.5)
+
+        update_quantity_wizard = self.env['change.production.qty'].create({
+            'mo_id': mo.id,
+            'product_qty': 2,
+        })
+        update_quantity_wizard.change_prod_qty()
+
+        self.assertEqual(mo_child.product_qty, 1.0)

@@ -1295,10 +1295,11 @@ class Website(models.Model):
     @api.model
     def search_url_dependencies(self, res_model, res_ids):
         """ Search dependencies just for information. It will not catch 100%
-            of dependencies and False positive is more than possible
-            Each module could add dependences in this dict
-            :returns a dictionnary where key is the 'categorie' of object related to the given
-                view, and the value is the list of text and link to the resource using given page
+        of dependencies and False positive is more than possible
+        Each module could add dependences in this dict
+
+        :returns: a dictionnary where key is the 'categorie' of object related to the given
+            view, and the value is the list of text and link to the resource using given page
         """
         dependencies = {}
         current_website = self.get_current_website()
@@ -1361,6 +1362,7 @@ class Website(models.Model):
     @api.model
     def get_current_website(self, fallback=True):
         """ The current website is returned in the following order:
+
         - the website forced in session `force_website_id`
         - the website set in context
         - (if frontend or fallback) the website matching the request's "domain"
@@ -1799,7 +1801,7 @@ class Website(models.Model):
         if (self.env.user.has_group('base.group_system')
                 or self.env.user.has_group('website.group_website_designer')):
             return self.env["ir.actions.actions"]._for_xml_id("website.backend_dashboard")
-        return self.env["ir.actions.actions"]._for_xml_id("website.action_website")
+        raise AccessError(_("You don't have the necessary access rights to access this dashboard."))
 
     def get_client_action_url(self, url, mode_edit=False, mode_debug=0):
         action_params = {

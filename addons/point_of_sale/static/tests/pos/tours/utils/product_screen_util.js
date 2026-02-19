@@ -209,9 +209,9 @@ export function clickPartnerButton() {
         },
     ];
 }
-export function clickCustomer(name) {
+export function clickCustomer(name, pressEnter = false) {
     return [
-        ...PartnerList.searchCustomerValue(name),
+        ...PartnerList.searchCustomerValue(name, pressEnter),
         PartnerList.clickPartner(name),
         { ...back(), isActive: ["mobile"] },
     ];
@@ -942,6 +942,13 @@ function productInputSteps(name, barcode, list_price) {
     ];
 }
 
+export function ensureTaxesInputIsReadonly() {
+    return {
+        content: "Taxes field should be readonly.",
+        trigger: 'div[name="taxes_id"].o_readonly_modifier',
+    };
+}
+
 export function createProductFromFrontend(name, barcode, list_price, category) {
     return [
         ...productInputSteps(name, barcode, list_price),
@@ -1040,6 +1047,17 @@ export function openCartMobile() {
             trigger: ".switchpane .btn-switchpane:contains('Cart')",
             run: "click",
             isActive: ["mobile"],
+        },
+    ];
+}
+
+export function saveOrder() {
+    return [
+        clickReview(),
+        {
+            content: "save order",
+            trigger: ".pads .fa-upload",
+            run: "click",
         },
     ];
 }

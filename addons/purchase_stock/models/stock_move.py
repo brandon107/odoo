@@ -167,16 +167,18 @@ class StockMove(models.Model):
             aml_ids.add(aml.id)
             if aml.move_type == 'in_invoice':
                 aml_quantity += aml.product_uom_id._compute_quantity(aml.quantity, self.product_id.uom_id)
-                value += aml.currency_id._convert(aml.price_subtotal, self.company_id.currency_id, date=aml.date)
+                value += aml.company_id.currency_id.round(aml.price_subtotal / aml.currency_rate)
             elif aml.move_type == 'in_refund':
                 aml_quantity -= aml.product_uom_id._compute_quantity(aml.quantity, self.product_id.uom_id)
-                value -= aml.currency_id._convert(aml.price_subtotal, self.company_id.currency_id, date=aml.date)
+                value -= aml.company_id.currency_id.round(aml.price_subtotal / aml.currency_rate)
 
         if aml_quantity <= 0:
             return valuation_data
 
         other_candidates_qty = 0
         for move in self.purchase_line_id.move_ids:
+            if move == self:
+                continue
             if move.product_id != self.product_id:
                 continue
             if move.date > self.date or (move.date == self.date and move.id > self.id):
@@ -205,6 +207,10 @@ class StockMove(models.Model):
             bills=account_moves.mapped('display_name'))
         return valuation_data
 
+    def _get_cost_ratio(self, quantity):
+        self.ensure_one()
+        return quantity
+
     def _get_value_from_quotation(self, quantity, at_date=None):
         # TODO: Start from global value
         if not self.purchase_line_id:
@@ -212,7 +218,8 @@ class StockMove(models.Model):
         price_unit = self.purchase_line_id.with_context(conversion_date=self.date)._get_stock_move_price_unit()
         uom_quantity = self.product_uom._compute_quantity(quantity, self.product_id.uom_id)
         quantity = min(quantity, uom_quantity)
-        value = price_unit * quantity
+        cost_ratio = self._get_cost_ratio(quantity)
+        value = price_unit * cost_ratio
         return {
             'value': value,
             'quantity': quantity,

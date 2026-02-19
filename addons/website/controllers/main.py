@@ -157,9 +157,10 @@ class Website(Home):
             domain_to = get_base_domain(website.domain)
             if domain_from != domain_to:
                 # redirect to correct domain for a correct routing map
+                query_params = urllib.parse.urlencode({'isredir': 1, 'path': path})
                 url_to = tools.urls.urljoin(
                     website.domain,
-                    '/website/force/%s?isredir=1&path=%s' % (website.id, path),
+                    f'/website/force/{website.id}?{query_params}',
                 )
                 return request.redirect(url_to)
         website._force()
@@ -697,7 +698,7 @@ class Website(Home):
         # If that URL is also a menu, we update it accordingly.
         # NB: we don't want to slugify on menu creation as it could redirect
         # towards files (with spaces, apostrophes, etc.).
-        menu = request.env['website.menu'].search([('url', '=', '/' + path)])
+        menu = request.env['website.menu'].search([('url', '=', '/' + path), ('page_id', '=', False)])
         if menu:
             menu.page_id = page['page_id']
 

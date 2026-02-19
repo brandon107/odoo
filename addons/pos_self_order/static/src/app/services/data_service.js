@@ -49,4 +49,9 @@ export const unpatchSelf = patch(PosData.prototype, {
         return recordMap;
     },
     async checkAndDeleteMissingOrders(results) {},
+    async deleteRecordsInIndexedDB(model, ids) {
+        return session.data.self_ordering_mode === "mobile"
+            ? await super.deleteRecordsInIndexedDB(...arguments)
+            : true;
+    },
 });

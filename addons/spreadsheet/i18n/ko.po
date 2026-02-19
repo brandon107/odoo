@@ -3,14 +3,14 @@
 # * spreadsheet
 #
 # "Dylan Kiss (dyki)" <dyki@odoo.com>, 2025.
-# "Kwanghee Park (kwpa)" <kwpa@odoo.com>, 2025.
+# "Kwanghee Park (kwpa)" <kwpa@odoo.com>, 2025, 2026.
 # Weblate <noreply-mt-weblate@weblate.org>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-07 18:37+0000\n"
-"PO-Revision-Date: 2025-12-11 06:44+0000\n"
+"POT-Creation-Date: 2026-02-06 18:36+0000\n"
+"PO-Revision-Date: 2026-02-11 17:43+0000\n"
 "Last-Translator: \"Kwanghee Park (kwpa)\" <kwpa@odoo.com>\n"
 "Language-Team: Korean <https://translate.odoo.com/projects/odoo-19/"
 "spreadsheet/ko/>\n"
@@ -1057,7 +1057,8 @@ msgstr ""
 msgid ""
 "An optional default value to be returned if none of the cases match "
 "expression."
-msgstr "선택적인 기본값으로 조건식과 일치하는 경우가 없는 경우 반환되는 값입니다."
+msgstr ""
+"선택적인 기본값으로 조건식과 일치하는 경우가 없는 경우 반환되는 값입니다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -1532,13 +1533,13 @@ msgstr "10억"
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Binary search (sorted ascending order)"
-msgstr ""
+msgstr "이진 탐색 (오름차순 정렬)"
 
 #. module: spreadsheet
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Binary search (sorted descending order)"
-msgstr ""
+msgstr "이진 탐색 (내림차순 정렬)"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -1850,7 +1851,7 @@ msgstr "지정된 문자열에 있는 각 단어를 대문자로 표시합니다
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Capture groups of first match"
-msgstr ""
+msgstr "첫 번째 일치하는 그룹 캡처"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -2267,6 +2268,14 @@ msgstr "콤마"
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Compare two numeric values, returning 1 if they're equal."
 msgstr "두 숫자 값을 비교하고 같은 경우 1을 반환합니다."
+
+#. module: spreadsheet
+#. odoo-javascript
+#: code:addons/spreadsheet/static/src/pivot/pivot_functions.js:0
+msgid ""
+"Compatibility version of ODOO.FILTER.VALUE for v18 spreadsheets. Required "
+"for date filters. Optional for others."
+msgstr ""
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -3489,7 +3498,7 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Don't match to end (default)"
-msgstr ""
+msgstr "끝까지 일치하지 않음 (기본값)"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -3534,7 +3543,7 @@ msgstr "소요시간"
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "E.g. 1234567 -> %(value)s"
-msgstr ""
+msgstr "예: 1234567 -> %(value)s"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -4060,7 +4069,7 @@ msgstr "금요일"
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Friday is the only weekend"
-msgstr ""
+msgstr "금요일만 주말로 처리합니다"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -4170,16 +4179,18 @@ msgstr ""
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid ""
 "Function [[FUNCTION_NAME]] expects number values for %s, but got a boolean."
-msgstr "함수 [[FUNCTION_NAME]] 의 %s에 기대되는 값은 숫자 값이나, 부울 값이 "
-"출력되었습니다."
+msgstr ""
+"함수 [[FUNCTION_NAME]] 의 %s에 기대되는 값은 숫자 값이나, 부울 값이 출력되었"
+"습니다."
 
 #. module: spreadsheet
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid ""
 "Function [[FUNCTION_NAME]] expects number values for %s, but got a string."
-msgstr "함수 [[FUNCTION_NAME]] 의 %s에 기대되는 값은 숫자 값이나, 문자열이 "
-"출력되었습니다."
+msgstr ""
+"함수 [[FUNCTION_NAME]] 의 %s에 기대되는 값은 숫자 값이나, 문자열이 출력되었습"
+"니다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -4187,8 +4198,9 @@ msgstr "함수 [[FUNCTION_NAME]] 의 %s에 기대되는 값은 숫자 값이나,
 msgid ""
 "Function [[FUNCTION_NAME]] expects number values for %s, but got an empty "
 "value."
-msgstr "함수 [[FUNCTION_NAME]] 의 %s에 기대되는 값은 숫자 값이나, 빈 값이 "
-"출력되었습니다."
+msgstr ""
+"함수 [[FUNCTION_NAME]] 의 %s에 기대되는 값은 숫자 값이나, 빈 값이 출력되었습"
+"니다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -5069,8 +5081,8 @@ msgid ""
 "Invalid number of arguments for the %(functionName)s function. Expected %"
 "(maxArgPossible)s maximum, but got %(nbrArgSupplied)s instead."
 msgstr ""
-"%(functionName)s 함수에서 인수 개수가 올바르지 않습니다. 예상 최대값은 "
-"%(maxArgPossible)s 개이지만, 반환된 개수는 %(nbrArgSupplied)s 개입니다."
+"%(functionName)s 함수에서 인수 개수가 올바르지 않습니다. 예상 최대값은 %"
+"(maxArgPossible)s 개이지만, 반환된 개수는 %(nbrArgSupplied)s 개입니다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -5079,8 +5091,8 @@ msgid ""
 "Invalid number of arguments for the %(functionName)s function. Expected %"
 "(minArgRequired)s minimum, but got %(nbrArgSupplied)s instead."
 msgstr ""
-"%(functionName)s 함수에서 인수 개수가 올바르지 않습니다. 예상 최소값은 "
-"%(maxArgPossible)s 개이지만, 반환된 개수는 %(nbrArgSupplied)s 개입니다."
+"%(functionName)s 함수에서 인수 개수가 올바르지 않습니다. 예상 최소값은 %"
+"(maxArgPossible)s 개이지만, 반환된 개수는 %(nbrArgSupplied)s 개입니다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -5099,6 +5111,12 @@ msgstr ""
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Invalid reference"
 msgstr "잘못된 참조"
+
+#. module: spreadsheet
+#. odoo-javascript
+#: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
+msgid "Invalid regular expression"
+msgstr "잘못된 정규 표현식"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -5906,7 +5924,7 @@ msgstr "월요일"
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Monday is the only weekend"
-msgstr ""
+msgstr "월요일만 주말로 처리합니다"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -6392,8 +6410,9 @@ msgstr "한 숫자를 다른 숫자로 나눈 값."
 msgid ""
 "One or more of the provided criteria values are invalid. Please review and "
 "correct them."
-msgstr "제공된 기준값 중 하나 이상이 유효하지 않습니다. 확인 후 수정해주시기 "
-"바랍니다."
+msgstr ""
+"제공된 기준값 중 하나 이상이 유효하지 않습니다. 확인 후 수정해주시기 바랍니"
+"다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -6595,8 +6614,9 @@ msgstr "피벗 테이블"
 msgid ""
 "Pivot updates only work with dynamic pivot tables. Use the formula '%s' or "
 "re-insert the static pivot from the Data menu."
-msgstr "피벗 업데이트는 동적 피벗 테이블에서만 지원됩니다. '%s' 수식을 사용하거나 "
-"데이터 메뉴에서 정적 피벗을 다시 삽입하세요."
+msgstr ""
+"피벗 업데이트는 동적 피벗 테이블에서만 지원됩니다. '%s' 수식을 사용하거나 데"
+"이터 메뉴에서 정적 피벗을 다시 삽입하세요."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -7301,9 +7321,9 @@ msgid ""
 "plain text, and \"v\" (for value) if the cell contains any other type of "
 "data."
 msgstr ""
-"참조하는 셀의 데이터 유형을 반환합니다. 빈 셀인 경우 \"b\", 일반 텍스트가 "
-"있는 셀인 경우 \"l\"(라벨용), 기타 유형의 데이터가 있는 셀인 경우 \"v\"(값)"
-"가 반환됩니다."
+"참조하는 셀의 데이터 유형을 반환합니다. 빈 셀인 경우 \"b\", 일반 텍스트가 있"
+"는 셀인 경우 \"l\"(라벨용), 기타 유형의 데이터가 있는 셀인 경우 \"v\"(값)가 "
+"반환됩니다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -7425,7 +7445,7 @@ msgstr "토요일"
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Saturday is the only weekend"
-msgstr ""
+msgstr "토요일만 주말로 처리합니다"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -7491,7 +7511,7 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Search first to last (default)"
-msgstr ""
+msgstr "처음부터 마지막 값까지 검색 (기본값)"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -8192,7 +8212,7 @@ msgstr "일요일"
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Sunday is the only weekend"
-msgstr ""
+msgstr "일요일만 주말로 처리합니다"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -9268,8 +9288,9 @@ msgstr "첫 번째 추가."
 msgid ""
 "The first and second arguments of [[FUNCTION_NAME]] must be non-empty "
 "matrices."
-msgstr "[[FUNCTION_NAME]]의 첫 번째 및 두 번째 인수는 비어 있지 않은 행렬이어야 "
-"합니다."
+msgstr ""
+"[[FUNCTION_NAME]]의 첫 번째 및 두 번째 인수는 비어 있지 않은 행렬이어야 합니"
+"다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -10408,7 +10429,8 @@ msgstr "'데이터' 내 값을 계산하고 반환할 0과 1을 제외한 백분
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "The period (%(period)s) must be less than or equal life (%(life)s)."
-msgstr "해당 기간(%(period)s)은 반드시 예상 기간(%(life)s)보다 작거나 같아야 합니다."
+msgstr ""
+"해당 기간(%(period)s)은 반드시 예상 기간(%(life)s)보다 작거나 같아야 합니다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -10530,8 +10552,9 @@ msgstr "소수점 이하 소수점 규칙으로 표시된 가격 견적."
 msgid ""
 "The purchase_date (%(purchaseDate)s) must be before the first_period_end (%"
 "(firstPeriodEnd)s)."
-msgstr "구매일 (%(purchaseDate)s)은 첫 번째 기간 종료일 (%(firstPeriodEnd)s) "
-"이전이어야 합니다."
+msgstr ""
+"구매일 (%(purchaseDate)s)은 첫 번째 기간 종료일 (%(firstPeriodEnd)s) 이전이어"
+"야 합니다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -11347,7 +11370,7 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "The type of information requested."
-msgstr ""
+msgstr "요청받은 정보의 유형입니다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -12131,8 +12154,8 @@ msgid ""
 "            may indicate potential errors in formula structures, references "
 "or arguments."
 msgstr ""
-"이 도구를 통해 수식 패턴을 분석하고 불일치하는 내용을 별도 표시합니다. "
-"불규칙한 경우\n"
+"이 도구를 통해 수식 패턴을 분석하고 불일치하는 내용을 별도 표시합니다. 불규칙"
+"한 경우\n"
 "수식 구조, 참조 또는 인수에 잠재적인 오류 가능성을 의미합니다."
 
 #. module: spreadsheet
@@ -12143,9 +12166,9 @@ msgid ""
 "inconsistencies. Irregularities may indicate potential errors in formula "
 "structures, references, or arguments. (Click to turn off)"
 msgstr ""
-"이 도구는 스프레드시트 수식의 패턴을 분석하고 불일치를 강조 표시합니다. "
-"불규칙성은 수식 구조, 참조 또는 인수에 잠재적인 오류가 있음을 나타낼 수 "
-"있습니다. (클릭하여 기능 끄기)"
+"이 도구는 스프레드시트 수식의 패턴을 분석하고 불일치를 강조 표시합니다. 불규"
+"칙성은 수식 구조, 참조 또는 인수에 잠재적인 오류가 있음을 나타낼 수 있습니"
+"다. (클릭하여 기능 끄기)"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -12186,7 +12209,7 @@ msgstr "목요일"
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Thursday is the only weekend"
-msgstr ""
+msgstr "목요일만 주말로 처리합니다"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -12333,7 +12356,7 @@ msgstr "화요일"
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Tuesday is the only weekend"
-msgstr ""
+msgstr "화요일만 주말로 처리합니다"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -12491,6 +12514,12 @@ msgstr "알 수 없는 함수"
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Unknown function: \"%s\""
 msgstr "알 수 없는 함수: \"%s\""
+
+#. module: spreadsheet
+#. odoo-javascript
+#: code:addons/spreadsheet/static/src/pivot/pivot_helpers.js:0
+msgid "Unnamed Field"
+msgstr "이름 없는 필드"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -12878,7 +12907,7 @@ msgstr "수요일"
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Wednesday is the only weekend"
-msgstr ""
+msgstr "수요일만 주말로 처리합니다"
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -12910,8 +12939,9 @@ msgstr "해당 연도의 주 번호."
 msgid ""
 "Week value must be a string in the format %(example)s, but received %"
 "(received_value)s instead."
-msgstr "주에 대한 값은 %(example)s 형식의 문자열이어야 하나, 수신된 값은 "
-"%(received_value)s 입니다."
+msgstr ""
+"주에 대한 값은 %(example)s 형식의 문자열이어야 하나, 수신된 값은 %"
+"(received_value)s 입니다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -13016,7 +13046,7 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "Whether the match is case-sensitive."
-msgstr ""
+msgstr "매칭 시 대소문자 구분 여부입니다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -13285,8 +13315,9 @@ msgstr "[[FUNCTION_NAME]] 에는 숫자 값이 필요합니다."
 msgid ""
 "[[FUNCTION_NAME]] expects the provided values of %(argName)s to be a non-"
 "empty matrix."
-msgstr "[[FUNCTION_NAME]]의 제공된 %(argName)s 값은 비어 있지 않은 행렬이라고 "
-"가정합니다."
+msgstr ""
+"[[FUNCTION_NAME]]의 제공된 %(argName)s 값은 비어 있지 않은 행렬이라고 가정합"
+"니다."
 
 #. module: spreadsheet
 #. odoo-javascript
@@ -13334,7 +13365,7 @@ msgstr "b는 정상적으로 계산됩니다"
 #. odoo-javascript
 #: code:addons/spreadsheet/static/src/o_spreadsheet/o_spreadsheet.js:0
 msgid "b is forced to 1"
-msgstr ""
+msgstr "b는 1로 강제 설정됩니다"
 
 #. module: spreadsheet
 #. odoo-javascript
